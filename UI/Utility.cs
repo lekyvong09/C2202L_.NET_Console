@@ -14,6 +14,16 @@ namespace console.UI
             Console.WriteLine($"Enter {prompt}");
             return Console.ReadLine();
         }
+
+        public static void Alertify(string msg, bool success) {
+            if (success) {
+                Console.ForegroundColor = ConsoleColor.Blue;
+            } else {
+                Console.ForegroundColor = ConsoleColor.Red;
+            }
+            Console.WriteLine(msg);
+            Console.ResetColor();
+        }
     }
 
 }
