@@ -9,8 +9,10 @@
 
   <ItemGroup>
     <None Remove="UI\" />
+    <None Remove="Entities\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UI\" />
+    <Folder Include="Entities\" />
   </ItemGroup>
 </Project>
