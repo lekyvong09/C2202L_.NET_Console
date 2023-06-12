@@ -98,7 +98,11 @@ class Program
         }
 
 
+        Console.WriteLine($"Welcome back, {userLogin.CurrentActiveUser.FullName}");
         Utility.PressEnterToContinue();
+
+        /// welcome user message....
+        /// deposit -> balance + amount
     }
 }
 

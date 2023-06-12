@@ -8,6 +8,8 @@ namespace console.Services
 	{
 
         private List<UserAccount> userAccounts;
+        public UserAccount CurrentActiveUser { get; set; }
+
 
         public UserLogin() {
             InitializeData();
@@ -20,7 +22,7 @@ namespace console.Services
                 new UserAccount
                 { Id = 2, FullName = "User 2", AccountNumber = 234567, CardNumber = 765432, CardPin = 222222, AccountBalance = 20000, IsLocked = false },
                 new UserAccount
-                { Id = 3, FullName = "User 3", AccountNumber = 345678, CardNumber = 876543, CardPin = 333333, AccountBalance = 30000, IsLocked = false }
+                { Id = 3, FullName = "User 3", AccountNumber = 345678, CardNumber = 876543, CardPin = 333333, AccountBalance = 30000, IsLocked = true }
             };
         }
 
@@ -36,9 +38,18 @@ namespace console.Services
             Console.Clear();
 
             //Console.WriteLine($"Check number of account {userAccounts.Count()}");
-            
-            userAccounts.Where(element => element.CardNumber == cardNumber).FirstOrDefault();
-            UserAccount account = userAccounts.Find(element => element.CardNumber == cardNumber);
+
+            /// LINQ method
+            //UserAccount account = userAccounts
+            //    .Where(element => element.CardNumber == cardNumber)
+            //    .FirstOrDefault();
+
+            /// LINQ query
+            UserAccount account = (from a in userAccounts
+                                   where a.CardNumber == cardNumber
+                                   select a)
+                                   .FirstOrDefault();
+            // UserAccount account = userAccounts.Find(element => element.CardNumber == cardNumber);
 
             if (account != null) {
                 account.TotalLogin++;
@@ -50,6 +61,7 @@ namespace console.Services
 
                 if (account.CardPin == cardPin) {
                     isLoginSuccess = true;
+                    CurrentActiveUser = account;
                     account.TotalLogin = 0;
                 } else {
                     if (account.TotalLogin > 3) {
