@@ -24,14 +24,19 @@ class Program
             Utility.Alertify($"Your card pin is {cardPin}", true);
 
             loginSuccess = userLogin.CheckUserCardNumAndPassword(cardNumber, cardPin);
-
         }
 
         Console.WriteLine($"Welcome back, {userLogin.CurrentActiveUser.FullName}");
         Utility.PressEnterToContinue();
 
+
+        AppScreen.DisplayAppMenu();
+        int selectedNumber = AppScreen.ProcessMenuOption();
+
+        Utility.Alertify($"\nYour selected option is {selectedNumber}", true);
     }
 
-    
+
+
 }
 

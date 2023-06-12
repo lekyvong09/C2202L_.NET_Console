@@ -97,6 +97,37 @@ namespace console.UI
             return cardPin;
         }
 
+
+        public static void DisplayAppMenu() {
+            Console.Clear();
+            Console.WriteLine("---------App Menu---------");
+            Console.WriteLine("1. Account Balance       :");
+            Console.WriteLine("2. Cash Deposit          :");
+            Console.WriteLine("3. Withdrawal            :");
+            Console.WriteLine("4. Transfer              :");
+            Console.WriteLine("5. Transtraction         :");
+            Console.WriteLine("6. Logout                :");
+        }
+
+
+        public static int ProcessMenuOption()
+        {
+            int selectedNumber = 0;
+            while (selectedNumber < 1 || selectedNumber > 6)
+            {
+                string numberInput = Utility.GetUserInput("Input option");
+                try {
+                    selectedNumber = Int32.Parse(numberInput);
+                    continue;
+                } catch (FormatException e)
+                {
+                    Utility.Alertify("Invalid input. " + e.Message, false);
+                }
+                DisplayAppMenu();
+            }
+
+            return selectedNumber;
+        }
     }
         
 }
