@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using console.Constant;
 
 namespace console.UI
 {
@@ -124,6 +125,30 @@ namespace console.UI
                     Utility.Alertify("Invalid input. " + e.Message, false);
                 }
                 DisplayAppMenu();
+            }
+
+            switch (selectedNumber) {
+                case (int)AppMenu.AccountBalance:
+                    Console.WriteLine("Checking account number");
+                    break;
+                case (int)AppMenu.CashDeposit:
+                    Console.WriteLine("Deposit");
+                    break;
+                case (int)AppMenu.Withdrawal:
+                    Console.WriteLine("Withdrawal");
+                    break;
+                case (int)AppMenu.Transfer:
+                    Console.WriteLine("Transfer");
+                    break;
+                case (int)AppMenu.Transactions:
+                    Console.WriteLine("Transactions");
+                    break;
+                case (int)AppMenu.Logout:
+                    Console.WriteLine("Logout");
+                    break;
+                default:
+                    Utility.Alertify($"\n Invalid option", false);
+                    break;
             }
 
             return selectedNumber;

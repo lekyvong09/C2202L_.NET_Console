@@ -11,10 +11,12 @@
     <None Remove="UI\" />
     <None Remove="Entities\" />
     <None Remove="Services\" />
+    <None Remove="Constant\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UI\" />
     <Folder Include="Entities\" />
     <Folder Include="Services\" />
+    <Folder Include="Constant\" />
   </ItemGroup>
 </Project>
