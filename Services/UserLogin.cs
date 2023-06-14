@@ -4,26 +4,12 @@ using console.UI;
 
 namespace console.Services
 {
-	public class UserLogin
+	public class UserLogin : IUserLogin
 	{
+        private IDataService _dataService;
 
-        private List<UserAccount> userAccounts;
-        public UserAccount CurrentActiveUser { get; set; }
-
-
-        public UserLogin() {
-            InitializeData();
-        }
-
-        void InitializeData() {
-            userAccounts = new List<UserAccount> {
-                new UserAccount
-                { Id = 1, FullName = "Ray", AccountNumber = 123456, CardNumber = 654321, CardPin = 111111, AccountBalance = 10000, IsLocked = false },
-                new UserAccount
-                { Id = 2, FullName = "User 2", AccountNumber = 234567, CardNumber = 765432, CardPin = 222222, AccountBalance = 20000, IsLocked = false },
-                new UserAccount
-                { Id = 3, FullName = "User 3", AccountNumber = 345678, CardNumber = 876543, CardPin = 333333, AccountBalance = 30000, IsLocked = true }
-            };
+        public UserLogin(IDataService dataService) {
+            _dataService = dataService;
         }
 
         public bool CheckUserCardNumAndPassword(long cardNumber, int cardPin) {
@@ -40,7 +26,7 @@ namespace console.Services
             //    .FirstOrDefault();
 
             /// LINQ query
-            UserAccount account = (from a in userAccounts
+            UserAccount account = (from a in _dataService.UserAccounts
                                    where a.CardNumber == cardNumber
                                    select a)
                                    .FirstOrDefault();
@@ -56,7 +42,7 @@ namespace console.Services
 
                 if (account.CardPin == cardPin) {
                     isLoginSuccess = true;
-                    CurrentActiveUser = account;
+                    _dataService.CurrentActiveUser = account;
                     account.TotalLogin = 0;
                 } else {
                     if (account.TotalLogin > 3) {

@@ -3,6 +3,7 @@ using console.Constant;
 using console.Entities;
 using console.Services;
 using console.UI;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace console;
 class Program
@@ -10,10 +11,17 @@ class Program
     
     static void Main(string[] args)
     {
+        var serviceProvider = new ServiceCollection()
+            .AddScoped<IDataService, DataService>()
+            .AddScoped<IUserLogin, UserLogin>()
+            .BuildServiceProvider();
+
         long cardNumber;
         int cardPin;
         bool loginSuccess = false;
-        UserLogin userLogin = new UserLogin();
+        IUserLogin userLogin = serviceProvider.GetRequiredService<IUserLogin>();
+        IDataService dataService = serviceProvider.GetRequiredService<IDataService>();
+
         int selectedAppMenu = (int)AppMenu.Logout;
 
         while(selectedAppMenu == (int)AppMenu.Logout)
@@ -30,7 +38,7 @@ class Program
                 loginSuccess = userLogin.CheckUserCardNumAndPassword(cardNumber, cardPin);
             }
 
-            Console.WriteLine($"Welcome back, {userLogin.CurrentActiveUser.FullName}");
+            Console.WriteLine($"Welcome back, {dataService.CurrentActiveUser.FullName}");
             Utility.PressEnterToContinue();
 
 
