@@ -29,12 +29,7 @@ namespace console.Services
         public bool CheckUserCardNumAndPassword(long cardNumber, int cardPin) {
             bool isLoginSuccess = false;
 
-            /// verifying....
-            Console.WriteLine("\nVerifying...");
-            for (int i = 0; i < 10; i++) {
-                Console.Write(".");
-                Thread.Sleep(200);
-            }
+            Utility.PrintingDotAnimation("Verifying");
             Console.Clear();
 
             //Console.WriteLine($"Check number of account {userAccounts.Count()}");

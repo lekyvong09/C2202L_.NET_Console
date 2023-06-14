@@ -24,6 +24,17 @@ namespace console.UI
             Console.WriteLine(msg);
             Console.ResetColor();
         }
+
+        public static void PrintingDotAnimation(string msg = "")
+        {
+            /// verifying....
+            Console.WriteLine($"\n{msg}...");
+            for (int i = 0; i < 10; i++)
+            {
+                Console.Write(".");
+                Thread.Sleep(200);
+            }
+        }
     }
 
 }
