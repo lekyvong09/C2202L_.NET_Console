@@ -14,6 +14,7 @@ class Program
         var serviceProvider = new ServiceCollection()
             .AddScoped<IDataService, DataService>()
             .AddScoped<IUserLogin, UserLogin>()
+            .AddScoped<IAccountService, AccountService>()
             .BuildServiceProvider();
 
         long cardNumber;
@@ -21,6 +22,7 @@ class Program
         bool loginSuccess = false;
         IUserLogin userLogin = serviceProvider.GetRequiredService<IUserLogin>();
         IDataService dataService = serviceProvider.GetRequiredService<IDataService>();
+        IAccountService accountService = serviceProvider.GetRequiredService<IAccountService>();
 
         int selectedAppMenu = (int)AppMenu.Logout;
 
@@ -48,7 +50,7 @@ class Program
             switch (selectedAppMenu)
             {
                 case (int)AppMenu.AccountBalance:
-                    Console.WriteLine("Checking account number");
+                    Console.WriteLine($"Your account balance {accountService.CheckBalance()}");
                     break;
                 case (int)AppMenu.CashDeposit:
                     Console.WriteLine("Deposit");
@@ -72,7 +74,7 @@ class Program
                     break;
             }
 
-            Utility.Alertify($"\nYour selected option is {selectedAppMenu}", true);
+            // Utility.Alertify($"\nYour selected option is {selectedAppMenu}", true);
         }
         
     }
