@@ -88,7 +88,7 @@ class Program
                         if (depositSuccess) {
                             Utility.Alertify("\nDeposit successful.", true);
                         } else {
-                            Utility.Alertify("\nInvalid input.", false);
+                            Utility.Alertify("\nInvalid input. Please try again", false);
                         }
                         Utility.PressEnterToContinue();
                         break;
