@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using console.UI;
 
 namespace console.Services
 {
@@ -56,6 +57,14 @@ namespace console.Services
             Console.WriteLine($"Total US Dollars: {amount.ToString("C", new CultureInfo("en-US"))}");
 
             /// confirm
+            string confirmInput = Utility.GetUserInput("Press y then Enter to confirm");
+
+            if (confirmInput != "y") {
+                Utility.Alertify("\nYou have cancelled the request", false);
+                return false;
+            }
+
+            _dataService.Deposit(amount);
             return true;
         }
     }

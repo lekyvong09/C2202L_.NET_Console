@@ -77,7 +77,7 @@ class Program
                                 }
                                 amount = t;
                             }
-                            catch (FormatException e)
+                            catch (FormatException)
                             {
                                 Utility.Alertify("\nInvalid Input", false);
                                 continue;
