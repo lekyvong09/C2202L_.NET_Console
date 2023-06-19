@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using console.Constant;
 using console.Entities;
 using console.Services;
@@ -43,35 +44,72 @@ class Program
             Console.WriteLine($"Welcome back, {dataService.CurrentActiveUser.FullName}");
             Utility.PressEnterToContinue();
 
-
-            AppScreen.DisplayAppMenu();
-            selectedAppMenu = AppScreen.ProcessMenuOption();
-
-            switch (selectedAppMenu)
+            selectedAppMenu = (int)AppMenu.AccountBalance;
+            while (selectedAppMenu > 0 && selectedAppMenu < 6)
             {
-                case (int)AppMenu.AccountBalance:
-                    Console.WriteLine($"Your account balance {accountService.CheckBalance()}");
-                    break;
-                case (int)AppMenu.CashDeposit:
-                    Console.WriteLine("Deposit");
-                    break;
-                case (int)AppMenu.Withdrawal:
-                    Console.WriteLine("Withdrawal");
-                    break;
-                case (int)AppMenu.Transfer:
-                    Console.WriteLine("Transfer");
-                    break;
-                case (int)AppMenu.Transactions:
-                    Console.WriteLine("Transactions");
-                    break;
-                case (int)AppMenu.Logout:
-                    Utility.PrintingDotAnimation("Logging out");
-                    loginSuccess = false;
-                    Console.Clear();
-                    break;
-                default:
-                    Utility.Alertify($"\n Invalid option", false);
-                    break;
+                AppScreen.DisplayAppMenu();
+                selectedAppMenu = AppScreen.ProcessMenuOption();
+
+                switch (selectedAppMenu)
+                {
+                    case (int)AppMenu.AccountBalance:
+                        Console.WriteLine($"Your account balance {accountService.CheckBalance().ToString("C", new CultureInfo("en-US"))}");
+                        Utility.PressEnterToContinue();
+                        break;
+                    case (int)AppMenu.CashDeposit:
+                        Console.WriteLine("\nOnly multiples of 20 and 50 are allowed");
+
+                        int amount = 0;
+                        while(amount == 0)
+                        {
+                            string amountInput = Utility.GetUserInput("Input deposit amount:");
+                            try
+                            {
+                                var t = Int32.Parse(amountInput);
+
+                                if (!((t % 50) % 20 == 0 ||
+                                    ((t % 50) % 20 == 10 && (t / 50) > 0) ||
+                                    (t % 20) == 0
+                                    ))
+                                {
+                                    Utility.Alertify("\nInvalid Input", false);
+                                    continue;
+                                }
+                                amount = t;
+                            }
+                            catch (FormatException e)
+                            {
+                                Utility.Alertify("\nInvalid Input", false);
+                                continue;
+                            }
+                        }
+
+                        bool depositSuccess = accountService.PlaceDeposit(amount);
+                        if (depositSuccess) {
+                            Utility.Alertify("\nDeposit successful.", true);
+                        } else {
+                            Utility.Alertify("\nInvalid input.", false);
+                        }
+                        Utility.PressEnterToContinue();
+                        break;
+                    case (int)AppMenu.Withdrawal:
+                        Console.WriteLine("Withdrawal");
+                        break;
+                    case (int)AppMenu.Transfer:
+                        Console.WriteLine("Transfer");
+                        break;
+                    case (int)AppMenu.Transactions:
+                        Console.WriteLine("Transactions");
+                        break;
+                    case (int)AppMenu.Logout:
+                        Utility.PrintingDotAnimation("Logging out");
+                        loginSuccess = false;
+                        Console.Clear();
+                        break;
+                    default:
+                        Utility.Alertify($"\n Invalid option", false);
+                        break;
+                }
             }
 
             // Utility.Alertify($"\nYour selected option is {selectedAppMenu}", true);

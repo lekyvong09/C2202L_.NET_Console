@@ -7,6 +7,7 @@ namespace console.Services
 	{
         List<UserAccount> UserAccounts { get; set; }
         UserAccount CurrentActiveUser { get; set; }
+        void Deposit(int amount);
     }
 }
 

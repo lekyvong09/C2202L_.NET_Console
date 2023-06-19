@@ -25,6 +25,11 @@ namespace console.Services
                 { Id = 3, FullName = "User 3", AccountNumber = 345678, CardNumber = 876543, CardPin = 333333, AccountBalance = 30000, IsLocked = true }
             };
         }
+
+        public void Deposit(int amount)
+        {
+            CurrentActiveUser.AccountBalance += amount;
+        }
     }
 }
 
