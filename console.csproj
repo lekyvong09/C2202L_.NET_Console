@@ -21,5 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
+    <PackageReference Include="ConsoleTables" Version="2.4.2" />
   </ItemGroup>
 </Project>

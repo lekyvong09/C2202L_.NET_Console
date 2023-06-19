@@ -5,6 +5,7 @@ using console.Entities;
 using console.Services;
 using console.UI;
 using Microsoft.Extensions.DependencyInjection;
+using ConsoleTables;
 
 namespace console;
 class Program
@@ -99,7 +100,29 @@ class Program
                         Console.WriteLine("Transfer");
                         break;
                     case (int)AppMenu.Transactions:
-                        Console.WriteLine("Transactions");
+                        Console.WriteLine("Viewing Transactions...");
+                        List<Transaction> transactions =
+                            dataService.TransactionList
+                            .Where(t => t.UserBankAccountNumber == dataService.CurrentActiveUser.AccountNumber)
+                            .ToList();
+                        if (transactions.Count < 1) {
+                            Utility.Alertify("\nThere is no transaction yet", false);
+                        } else {
+                            var table = new ConsoleTable("Id", "Transaction Date", "Type"
+                                , "Description", "Amount");
+                            foreach (var tran in transactions) {
+                                table.AddRow(
+                                    tran.TransactionId,
+                                    tran.TransactionDate,
+                                    tran.TransactionType,
+                                    tran.Description,
+                                    tran.TransactionAmount.ToString("C", new CultureInfo("en-US")));
+                            }
+                            table.Options.EnableCount = false;
+                            table.Write();
+                            Console.WriteLine($"You have {transactions.Count} transactions");
+                        }
+                        Utility.PressEnterToContinue();
                         break;
                     case (int)AppMenu.Logout:
                         Utility.PrintingDotAnimation("Logging out");
