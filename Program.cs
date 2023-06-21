@@ -58,33 +58,7 @@ class Program
                         Utility.PressEnterToContinue();
                         break;
                     case (int)AppMenu.CashDeposit:
-                        Console.WriteLine("\nOnly multiples of 20 and 50 are allowed");
-
-                        int amount = 0;
-                        while(amount == 0)
-                        {
-                            string amountInput = Utility.GetUserInput("Input deposit amount:");
-                            try
-                            {
-                                var t = Int32.Parse(amountInput);
-
-                                if (!((t % 50) % 20 == 0 ||
-                                    ((t % 50) % 20 == 10 && (t / 50) > 0) ||
-                                    (t % 20) == 0
-                                    ))
-                                {
-                                    Utility.Alertify("\nInvalid Input", false);
-                                    continue;
-                                }
-                                amount = t;
-                            }
-                            catch (FormatException)
-                            {
-                                Utility.Alertify("\nInvalid Input", false);
-                                continue;
-                            }
-                        }
-
+                        int amount = AppScreen.GetInputAmountForDeposit();
                         bool depositSuccess = accountService.PlaceDeposit(amount);
                         if (depositSuccess) {
                             Utility.Alertify("\nDeposit successful.", true);
@@ -94,10 +68,41 @@ class Program
                         Utility.PressEnterToContinue();
                         break;
                     case (int)AppMenu.Withdrawal:
-                        Console.WriteLine("Withdrawal");
+                        int withdrawalAmount = AppScreen.GetWithdrawAmount();
+                        if (withdrawalAmount > dataService.CurrentActiveUser.AccountBalance) {
+                            Utility.Alertify("\nYour balance is not enough", false);
+                        } else {
+                            dataService.Withdrawal(withdrawalAmount);
+                            Utility.Alertify("\nPlease get your cash at the tray", true);
+                        }
+                        Utility.PressEnterToContinue();
                         break;
                     case (int)AppMenu.Transfer:
-                        Console.WriteLine("Transfer");
+                        Console.WriteLine("Internal Transfer");
+                        long targetAccountNumber = 0;
+                        while (targetAccountNumber == 0) {
+                            string numberInput = Utility.GetUserInput("Input target account:");
+                            try {
+                                var tempAccountNumber = Int64.Parse(numberInput);
+                                bool existTargetAccount =
+                                    dataService.UserAccounts.Any(cus => cus.AccountNumber == tempAccountNumber
+                                                 && cus.AccountNumber != dataService.CurrentActiveUser.AccountNumber);
+                                if (existTargetAccount) {
+                                    targetAccountNumber = tempAccountNumber;
+                                } else {
+                                    Utility.Alertify("\nWrong target account", false);
+                                    continue;
+                                }
+                            } catch (FormatException) {
+                                Utility.Alertify("\nWrong target account", false);
+                                continue;
+                            }
+                        }
+
+                        /// transfer
+                        int transferAmount = AppScreen.GetTransferAmount();
+                        dataService.InternalTransferSourceAccount(transferAmount, targetAccountNumber);
+                        dataService.InternalTransferTargetAccount(transferAmount, targetAccountNumber);
                         break;
                     case (int)AppMenu.Transactions:
                         Console.WriteLine("Viewing Transactions...");

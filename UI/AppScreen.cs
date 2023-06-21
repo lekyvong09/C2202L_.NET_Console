@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using console.Constant;
 
@@ -130,6 +131,138 @@ namespace console.UI
             
 
             return selectedNumber;
+        }
+
+        public static int GetInputAmountForDeposit()
+        {
+            Console.WriteLine("\nOnly multiples of 20 and 50 are allowed");
+
+            int amount = 0;
+            while (amount == 0)
+            {
+                string amountInput = Utility.GetUserInput("Input deposit amount:");
+                try
+                {
+                    var t = Int32.Parse(amountInput);
+
+                    if (!((t % 50) % 20 == 0 ||
+                        ((t % 50) % 20 == 10 && (t / 50) > 0) ||
+                        (t % 20) == 0
+                        ))
+                    {
+                        Utility.Alertify("\nInvalid Input", false);
+                        continue;
+                    }
+                    amount = t;
+                }
+                catch (FormatException)
+                {
+                    Utility.Alertify("\nInvalid Input", false);
+                    continue;
+                }
+            }
+
+            return amount;
+        }
+
+
+        public static int GetWithdrawAmount()
+        {
+            /// display menu
+            Console.WriteLine("\nSelect to Withdraw");
+            Console.WriteLine($":1. {20.ToString("C", new CultureInfo("en-US"))}");
+            Console.WriteLine($":2. {50.ToString("C", new CultureInfo("en-US"))}");
+            Console.WriteLine($":3. {100.ToString("C", new CultureInfo("en-US"))}");
+            Console.WriteLine($":4. {200.ToString("C", new CultureInfo("en-US"))}");
+            Console.WriteLine($":5. {500.ToString("C", new CultureInfo("en-US"))}");
+            Console.WriteLine($":6. {1000.ToString("C", new CultureInfo("en-US"))}");
+            Console.WriteLine($":7. {2000.ToString("C", new CultureInfo("en-US"))}");
+            Console.WriteLine($":8. {5000.ToString("C", new CultureInfo("en-US"))}");
+            Console.WriteLine(":9. Input your own amount\n");
+
+            /// user input option
+            int option = 0;
+            while (option < 1 || option > 9)
+            {
+                string numberInput = Utility.GetUserInput("Input option:");
+                try {
+                    option = Int32.Parse(numberInput);
+                } catch (FormatException) {
+                    Utility.Alertify("Invalid input", false);
+                }
+            }
+
+            switch (option)
+            {
+                case 1:
+                    return 20;
+                case 2:
+                    return 50;
+                case 3:
+                    return 100;
+                case 4:
+                    return 200;
+                case 5:
+                    return 500;
+                case 6:
+                    return 1000;
+                case 7:
+                    return 2000;
+                case 8:
+                    return 5000;
+                default:
+                    int inputAmount = 0;
+                    while (inputAmount == 0)
+                    {
+                        string numberInput = Utility.GetUserInput("Input amount");
+                        try {
+                            inputAmount = Int32.Parse(numberInput);
+                            if (!(inputAmount % 20 == 0 || inputAmount % 50 == 0)) {
+                                Utility.Alertify("Invalid input. Must be divisible to $20 or $50", false);
+                                inputAmount = 0;
+                                continue;
+                            }
+                            if (inputAmount < 1 || inputAmount > 5000) {
+                                Utility.Alertify("Invalid input. Must be positive and less than $5000", false);
+                                inputAmount = 0;
+                                continue;
+                            }
+                        } catch (FormatException) {
+                            Utility.Alertify("Invalid input. Please try again", false);
+                        }
+                    }
+                    return inputAmount;
+            }
+
+            /// check user input amount
+            ///
+
+        }
+
+        public static int GetTransferAmount()
+        {
+            int amount = 0;
+            while (amount == 0)
+            {
+                string amountInput = Utility.GetUserInput("Input amount:");
+                try
+                {
+                    var t = Int32.Parse(amountInput);
+
+                    if (t > 0) {
+                        amount = t;
+                    } else {
+                        continue;
+                    }
+                }
+                catch (FormatException)
+                {
+                    Utility.Alertify("\nInvalid Input. Please try again", false);
+                    continue;
+                }
+            }
+
+            return amount;
         }
     }
         
